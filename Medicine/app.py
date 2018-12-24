@@ -1,3 +1,4 @@
+# coding: utf-8
 ##########################################################################################
 #   WSGIアプリケーションの起動設定を行います。
 ##########################################################################################
@@ -12,9 +13,9 @@ BASEDIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASEDIR)
 os.chdir(BASEDIR)
 
-# WSGIアプリケーションを始動
+# Apache2に対応するWSGIアプリケーションを始動: "application" の名前は必須
 import index
-app = bottle.default_app()
+application = bottle.default_app()
 
 if "DEBUG" in os.environ:
 	run(

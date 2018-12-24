@@ -1,0 +1,6 @@
+/.vscode
+ftp-sync.json
+Include/
+Lib/
+Scripts/
+__pycache__

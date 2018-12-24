@@ -1,3 +1,4 @@
+# coding: utf-8
 ##########################################################################################
 #   ルーティング設定とAPI処理内容を定義します。
 ##########################################################################################
@@ -18,7 +19,7 @@ DEFAULTNAME = config["DB"]["defaultname"]
 conn = sqlite3.connect(DBPATH)
 
 
-@get("/medicine/reset")
+@get("/reset")
 def reset():
 	"""諸々初期化
 	"""
@@ -27,25 +28,30 @@ def reset():
 	cursor.execute("CREATE TABLE IF NOT EXISTS %s (id INTEGER PRIMARY KEY, name TEXT, value int)" % DBTABLE)
 	cursor.execute("INSERT INTO %s VALUES (?, ?, ?)" % DBTABLE, (DEFAULTID, DEFAULTNAME, 0))
 	conn.commit()
+	return {}
 
 
-@post("/medicine/report")
+@post("/report")
 def report():
 	"""服用フラグを立てます。
 	"""
 	cursor = conn.cursor()
 	cursor.execute("UPDATE %s SET value = ? WHERE name = ?" % DBTABLE, (1, DEFAULTNAME))
+	conn.commit()
+	return {}
 
 
-@post("/medicine/unreport")
+@post("/unreport")
 def unreport():
 	"""服用フラグを解除します。
 	"""
 	cursor = conn.cursor()
 	cursor.execute("UPDATE %s SET value = ? WHERE name = ?" % DBTABLE, (0, DEFAULTNAME))
+	conn.commit()
+	return {}
 
 
-@post("/medicine/check")
+@post("/check")
 def check():
 	"""服用したかどうかを確認します。
 	"""
