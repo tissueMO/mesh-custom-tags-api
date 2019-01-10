@@ -1,6 +1,6 @@
 # coding: utf-8
 ##########################################################################################
-#   ルーティング設定とAPI処理内容を定義します。
+#   お薬アラート: ルーティング設定とAPI処理内容を定義します。
 ##########################################################################################
 from bottle import get, post, request
 import sqlite3
@@ -9,17 +9,17 @@ import configparser
 
 # 設定ファイル読み込み
 config = configparser.ConfigParser()
-config.read("settings.ini")
+config.read("status/settings.ini")
 
 # データベース設定
-DBPATH = config["DB"]["path"]
-DBTABLE = config["DB"]["table"]
-DEFAULTID = config["DB"]["defaultid"]
-DEFAULTNAME = config["DB"]["defaultname"]
+DBPATH = config["medicine"]["path"]
+DBTABLE = config["medicine"]["table"]
+DEFAULTID = config["medicine"]["defaultid"]
+DEFAULTNAME = config["medicine"]["defaultname"]
 conn = sqlite3.connect(DBPATH)
 
 
-@get("/reset")
+@get("/status/medicine/reset")
 def reset():
 	"""諸々初期化
 	"""
@@ -31,7 +31,7 @@ def reset():
 	return {}
 
 
-@post("/report")
+@post("/status/medicine/report")
 def report():
 	"""服用フラグを立てます。
 	"""
@@ -41,7 +41,7 @@ def report():
 	return {}
 
 
-@post("/unreport")
+@post("/status/medicine/unreport")
 def unreport():
 	"""服用フラグを解除します。
 	"""
@@ -51,7 +51,7 @@ def unreport():
 	return {}
 
 
-@post("/check")
+@post("/status/medicine/check")
 def check():
 	"""服用したかどうかを確認します。
 	"""

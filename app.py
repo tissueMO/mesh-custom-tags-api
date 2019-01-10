@@ -13,8 +13,11 @@ BASEDIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASEDIR)
 os.chdir(BASEDIR)
 
+# ルーティング設定を読み込み
+import status.route
+import holiday.route
+
 # Apache2に対応するWSGIアプリケーションを始動: "application" の名前は必須
-import index
 application = bottle.default_app()
 
 if "DEBUG" in os.environ:
