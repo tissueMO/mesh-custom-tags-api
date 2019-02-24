@@ -8,3 +8,4 @@ import configparser
 
 # サブモジュールを読み込み
 import status.medicine
+import status.has_item
