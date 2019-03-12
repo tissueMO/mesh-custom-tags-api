@@ -82,9 +82,9 @@ def check():
 			"result": -1,
 		}
 	else:
-		if result[0] == 1 and (dt.now() - dt.strptime(result[1], DATETIME_FORMAT)).total_seconds() < WAITSEC_AFTER_PUT:
-			# 所持していない場合、最後に置いたときから一定時間経っていないと無効にする: アナログGPIO入力が過敏に反応するのを回避するため
-			result = [INVALID_ID]
+		# if result[0] == 1 and (dt.now() - dt.strptime(result[1], DATETIME_FORMAT)).total_seconds() < WAITSEC_AFTER_PUT:
+		# 	# 所持していない場合、最後に置いたときから一定時間経っていないと無効にする: アナログGPIO入力が過敏に反応するのを回避するため
+		# 	result = [INVALID_ID]
 
 		return {
 			"result": result[0],
