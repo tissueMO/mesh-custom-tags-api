@@ -23,7 +23,7 @@ TARGET_WARNINGS = ["大雨警報", "大雨特別警報", "洪水警報"]
 # 時刻フォーマット
 DATETIME_FORMAT = "%Y/%m/%d %H:%M:%S"
 # キャッシュを有効とする分数
-VALID_CACHE_MINUTES = 0.5
+VALID_CACHE_MINUTES = 60
 
 
 @get("/weather/check")
