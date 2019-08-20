@@ -26,7 +26,7 @@ DATETIME_FORMAT = "%Y/%m/%d %H:%M:%S"
 VALID_CACHE_MINUTES = 60
 
 
-@get("/weather/check")
+@post("/weather/check")
 def check() -> int:
 	"""雨傘チェッカー
 
