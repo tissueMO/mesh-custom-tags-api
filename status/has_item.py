@@ -1,8 +1,6 @@
-# coding: utf-8
 ##########################################################################################
 #   忘れ物防止アラート: ルーティング設定とAPI処理内容を定義します。
 ##########################################################################################
-from bottle import get, post, request
 import sqlite3
 import configparser
 from datetime import datetime as dt

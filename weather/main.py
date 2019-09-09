@@ -1,8 +1,6 @@
-# coding: utf-8
 ##########################################################################################
-#   ルーティング設定とAPI処理内容を定義します。
+#    天気情報を取得するAPIです。
 ##########################################################################################
-from bottle import get, post, request
 from datetime import datetime as dt
 from bs4 import BeautifulSoup
 from statistics import mean
