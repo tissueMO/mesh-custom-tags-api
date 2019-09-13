@@ -71,7 +71,8 @@ ON/OFFのステートを管理します。
 - status ディレクトリーをWebサーバーの公開ディレクトリーにアップロードする
 - WebサーバーのWSGIを有効化する
 - venv等で status 内にPython3.7環境を構築する
-- $ pip install -r requirements.txt
+- `$ pip install -r requirements.txt`
+- WSGIサーバーの設定ファイルに `app.py` を起動する設定を追加する
 - Webサーバーを再起動した上で、所定のエンドポイントを呼び出す
 
 <br>
@@ -97,10 +98,11 @@ ON/OFFのステートを管理します。
 
 ### APIデプロイ方法
 
-- status ディレクトリーをWebサーバーの公開ディレクトリーにアップロードする
+- weather ディレクトリーをWebサーバーの公開ディレクトリーにアップロードする
 - WebサーバーのWSGIを有効化する
-- venv等で status 内にPython3.7環境を構築する
-- $ pip install -r requirements.txt
+- venv等で weather 内にPython3.7環境を構築する
+- `$ pip install -r requirements.txt`
+- WSGIサーバーの設定ファイルに `app.py` を起動する設定を追加する
 - Webサーバーを再起動した上で、所定のエンドポイントを呼び出す
 
 ---
