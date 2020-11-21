@@ -29,7 +29,7 @@ def check() -> int:
     """雨傘チェッカー
 
     Returns:
-      int -- 危険度 1-5 or 判定不能 -1
+        int -- 危険度 1-5 or 判定不能 -1
     """
     try:
         level = _get_rain_level()
@@ -54,7 +54,7 @@ def _has_cache_weather() -> bool:
     """直前の天気データを持つHTMLを流用できるかどうかを調べます。
 
     Returns:
-      bool -- 直前の天気データを持つHTMLを流用できる場合はTrue、それ以外はFalse
+        bool -- 直前の天気データを持つHTMLを流用できる場合はTrue、それ以外はFalse
     """
     if not os.path.exists(CACHE_WEATHER_FILE):
         # まだ実行されていない
@@ -78,7 +78,7 @@ def _load_cache_weather() -> str:
     """直前の天気データを持つHTMLを読み込みます。
 
     Returns:
-      str -- 直前の天気データを持つHTML
+        str -- 直前の天気データを持つHTML
     """
     if not os.path.exists(CACHE_WEATHER_FILE):
         # まだ実行されていない
@@ -93,7 +93,7 @@ def _save_cache_weather(html: str):
     """最後に取得した天気データを持つHTMLを書き出します。
 
     Arguments:
-      html {str} -- 天気データを持つHTML
+        html {str} -- 天気データを持つHTML
     """
     with codecs.open(CACHE_WEATHER_FILE, "w", encoding="UTF-8") as fweather:
         # 現在時刻を埋め込み
@@ -109,7 +109,7 @@ def _has_cache_warning() -> bool:
     """直前の警報データを持つHTMLを流用できるかどうかを調べます。
 
     Returns:
-      bool -- 直前の警報データを持つHTMLを流用できる場合はTrue、それ以外はFalse
+        bool -- 直前の警報データを持つHTMLを流用できる場合はTrue、それ以外はFalse
     """
     if not os.path.exists(CACHE_WARNING_FILE):
         # まだ実行されていない
@@ -133,7 +133,7 @@ def _load_cache_warning() -> str:
     """直前の警報データを持つHTMLを読み込みます。
 
     Returns:
-      str -- 直前の警報データを持つHTML
+        str -- 直前の警報データを持つHTML
     """
     if not os.path.exists(CACHE_WARNING_FILE):
         # まだ実行されていない
@@ -148,7 +148,7 @@ def _save_cache_warning(html: str):
     """最後に取得した警報データを持つHTMLを書き出します。
 
     Arguments:
-      html {str} -- 警報データを持つHTML
+        html {str} -- 警報データを持つHTML
     """
     with codecs.open(CACHE_WARNING_FILE, "w", encoding="UTF-8") as fwarning:
         # 現在時刻を埋め込み
@@ -164,15 +164,15 @@ def _get_rain_level() -> int:
     """天気および降水確率から危険度を4段階で返します。
 
     Raises:
-      Exception: レスポンスが正常に返ってこなかった場合に送出する
+        Exception: レスポンスが正常に返ってこなかった場合に送出する
 
     Returns:
-      int -- 危険度
-        4: 雨を66%以上含む or 降水確率の平均が60%を超える
-        3: 雨を含む or 降水確率の平均が40%を超える
-        2: 曇りを含む or 降水確率の平均が0%を超える
-        1: 晴れを含む or 降水確率の平均が0%
-        -1: 翌日の予報まで過ぎてしまっているイレギュラーなケース。判定不能
+        int -- 危険度
+            4: 雨を66%以上含む or 降水確率の平均が60%を超える
+            3: 雨を含む or 降水確率の平均が40%を超える
+            2: 曇りを含む or 降水確率の平均が0%を超える
+            1: 晴れを含む or 降水確率の平均が0%
+            -1: 翌日の予報まで過ぎてしまっているイレギュラーなケース。判定不能
     """
     # 天気情報取得
     has_cache = _has_cache_weather()
@@ -261,10 +261,10 @@ def _has_warn() -> bool:
     ただし、この情報は取得時点で発表されている情報です。
 
     Raises:
-      Exception: レスポンスが正常に返ってこなかった場合に送出する
+        Exception: レスポンスが正常に返ってこなかった場合に送出する
 
     Returns:
-      bool -- 雨に関する警報/特別警報が発表されている場合はTrue、それ以外はFalse
+        bool -- 雨に関する警報/特別警報が発表されている場合はTrue、それ以外はFalse
     """
     has_cache = _has_cache_warning()
     if not has_cache:

@@ -24,9 +24,9 @@ def is_holiday(request):
     """指定された日付が休日であるかどうかを返します。
 
     Arguments:
-      request: HTTPリクエストデータ
+        request: HTTPリクエストデータ
     Returns:
-      {bool} -- 土日祝のいずれかに当てはまる場合はTrueを返します。
+        bool -- 土日祝のいずれかに当てはまる場合はTrueを返します。
     """
     if not "date" in request:
         return ("date要素がありません", 400, None)
@@ -48,9 +48,9 @@ def _is_holiday(dt: date) -> bool:
     """休日であるかどうかを返します。
 
     Arguments:
-      dt {date} -- 対象の日付
+        dt {date} -- 対象の日付
     Returns:
-      {bool} -- 土日祝のいずれかに当てはまる場合はTrueを返します。
+        bool -- 土日祝のいずれかに当てはまる場合はTrueを返します。
     """
     if dt.weekday() in [WEEKDAYS["土"], WEEKDAYS["日"]]:
         return True

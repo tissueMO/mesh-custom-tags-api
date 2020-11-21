@@ -8,11 +8,19 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    return main.is_holiday(get_request_json())
+
+
+def get_request_json():
+    """GET/POST両方に対応した形式でリクエストデータを変換します。
+
+    Returns:
+        list: リクエストデータ
+    """
     if request.method == "POST":
-        request_json = request.json
+        return request.json
     else:
-        request_json = request.args
-    return main.is_holiday(request_json)
+        return request.args
 
 
 if __name__ == "__main__":
