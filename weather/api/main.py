@@ -7,21 +7,22 @@ from statistics import mean
 import requests
 import os
 import codecs
+import json
 
+# 設定値ロード
+import configparser
+config = configparser.ConfigParser()
+config.read("./config.ini", "UTF-8")
 
-# 定数定義
-# tenki.jpのサイトを解析して判定する
-WEATHER_SOURCE_URL = "https://tenki.jp/forecast/1/2/1400/1100/1hour.html"
-WARNING_SOURCE_URL = "https://tenki.jp/bousai/warn/1/2/110000/"
-INVALID_CELL = "---"
-# 9:00-10:00、18:00-22:00の天気情報を対象とする
-TARGET_TIME_INDICES = [8, 17, 18, 19, 20, 21]
-# Lv.5の判定に使用する警報
-TARGET_WARNINGS = ["大雨警報", "大雨特別警報", "洪水警報"]
-# 時刻フォーマット
-DATETIME_FORMAT = "%Y/%m/%d %H:%M:%S"
-# キャッシュを有効とする分数
-VALID_CACHE_MINUTES = 60
+WEATHER_SOURCE_URL = config.get("weather", "weather_source_url")
+WARNING_SOURCE_URL = config.get("weather", "warning_source_url")
+INVALID_CELL = config.get("weather", "invalid_cell")
+TARGET_TIME_INDICES = list(json.loads(config.get("weather", "target_time_indices")))
+TARGET_WARNINGS = list(json.loads(config.get("weather", "target_warnings")))
+DATETIME_FORMAT = config.get("weather", "datetime_format")
+VALID_CACHE_MINUTES = int(config.get("weather", "valid_cache_minutes"))
+CACHE_WEATHER_FILE = config.get("weather", "cache_weather_file")
+CACHE_WARNING_FILE = config.get("weather", "cache_warning_file")
 
 
 def check() -> int:
@@ -35,8 +36,10 @@ def check() -> int:
         is_warn = _has_warn()
     except Exception as e:
         import traceback
-        traceback.print_exc()
-        return -1
+        traceback.print_exec()
+        return {
+            "result": -1
+        }
 
     if level == 4 and is_warn:
         # 警報付きの場合にLv.MAX
@@ -53,11 +56,11 @@ def _has_cache_weather() -> bool:
     Returns:
       bool -- 直前の天気データを持つHTMLを流用できる場合はTrue、それ以外はFalse
     """
-    if not os.path.exists("_last-weather.html"):
+    if not os.path.exists(CACHE_WEATHER_FILE):
         # まだ実行されていない
         return False
 
-    with codecs.open("_last-weather.html", "r", encoding="UTF-8") as fweather:
+    with codecs.open(CACHE_WEATHER_FILE, "r", encoding="UTF-8") as fweather:
         last_time_str = fweather.readline().replace("\n", "")
         last_time = dt.strptime(last_time_str, DATETIME_FORMAT)
         now_time = dt.now()
@@ -77,11 +80,11 @@ def _load_cache_weather() -> str:
     Returns:
       str -- 直前の天気データを持つHTML
     """
-    if not os.path.exists("_last-weather.html"):
+    if not os.path.exists(CACHE_WEATHER_FILE):
         # まだ実行されていない
         return False
 
-    with codecs.open("_last-weather.html", "r", encoding="UTF-8") as fweather:
+    with codecs.open(CACHE_WEATHER_FILE, "r", encoding="UTF-8") as fweather:
         fweather.readline()
         return fweather.read()
 
@@ -92,14 +95,14 @@ def _save_cache_weather(html: str):
     Arguments:
       html {str} -- 天気データを持つHTML
     """
-    with codecs.open("_last-weather.html", "w", encoding="UTF-8") as fweather:
+    with codecs.open(CACHE_WEATHER_FILE, "w", encoding="UTF-8") as fweather:
         # 現在時刻を埋め込み
         fweather.write(dt.now().strftime(DATETIME_FORMAT) + "\n")
 
         # 実際のHTMLは2行目から
         fweather.write(html)
 
-    os.chmod("_last-weather.html", 0o0600)
+    os.chmod(CACHE_WEATHER_FILE, 0o0600)
 
 
 def _has_cache_warning() -> bool:
@@ -108,11 +111,11 @@ def _has_cache_warning() -> bool:
     Returns:
       bool -- 直前の警報データを持つHTMLを流用できる場合はTrue、それ以外はFalse
     """
-    if not os.path.exists("_last-warning.html"):
+    if not os.path.exists(CACHE_WARNING_FILE):
         # まだ実行されていない
         return False
 
-    with codecs.open("_last-warning.html", "r", encoding="UTF-8") as fwarning:
+    with codecs.open(CACHE_WARNING_FILE, "r", encoding="UTF-8") as fwarning:
         last_time_str = fwarning.readline().replace("\n", "")
         last_time = dt.strptime(last_time_str, DATETIME_FORMAT)
         now_time = dt.now()
@@ -132,11 +135,11 @@ def _load_cache_warning() -> str:
     Returns:
       str -- 直前の警報データを持つHTML
     """
-    if not os.path.exists("_last-warning.html"):
+    if not os.path.exists(CACHE_WARNING_FILE):
         # まだ実行されていない
         return False
 
-    with codecs.open("_last-warning.html", "r", encoding="UTF-8") as fwarning:
+    with codecs.open(CACHE_WARNING_FILE, "r", encoding="UTF-8") as fwarning:
         fwarning.readline()
         return fwarning.read()
 
@@ -147,14 +150,14 @@ def _save_cache_warning(html: str):
     Arguments:
       html {str} -- 警報データを持つHTML
     """
-    with codecs.open("_last-warning.html", "w", encoding="UTF-8") as fwarning:
+    with codecs.open(CACHE_WARNING_FILE, "w", encoding="UTF-8") as fwarning:
         # 現在時刻を埋め込み
         fwarning.write(dt.now().strftime(DATETIME_FORMAT) + "\n")
 
         # 実際のHTMLは2行目から
         fwarning.write(html)
 
-    os.chmod("_last-warning.html", 0o0600)
+    os.chmod(CACHE_WARNING_FILE, 0o0600)
 
 
 def _get_rain_level() -> int:
