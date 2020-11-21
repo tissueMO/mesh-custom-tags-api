@@ -1,87 +1,68 @@
 # MESHカスタムタグ用API集
 
+## API外部仕様
 
-## 休日判定API (holiday)
+### 休日判定API (holiday)
 
 リクエストを送った時点の日付が土日祝に該当するかどうかを返します。
 
 - 休日判定
-	- エンドポイント: is_holiday
+	- エンドポイント: /holiday/is_holiday
 	- IN: JSON
 		- date: 判定対象の日付。yyyy/mm/dd の形式
 	- OUT: JSON
 		- result: 平日の場合は0, 土日祝の場合は1
 
 
-### APIデプロイ方法
-
-- holiday ディレクトリーを (裸で) zipに固める
-- Google Cloud Functions にアップロード
-	- 実行する関数: is_holiday
-<br>
-
-
-## ステータス管理API (status)
+### ステータス管理API (status)
 
 ON/OFFのステートを管理します。
 ソースファイルごとに管理するステートを分離しています。
 
-### 忘れ物防止アラート (所持管理)
-
-- 状態リセット
-	- エンドポイント: /status/has_item/reset
+- 状態を初期化
+	- エンドポイント: /status/reset
 	- IN: なし
 	- OUT: なし
-- 所持状態にセット
-	- エンドポイント: /status/has_item/get
-	- IN: なし
+- フラグをONにセット
+	- エンドポイント: /status/on
+	- IN: JSON
+    - name: ステータス名
 	- OUT: なし
-- 所持状態を解除
-	- エンドポイント: /status/has_item/put
-	- IN: なし
+- フラグをOFFにセット
+	- エンドポイント: /status/off
+	- IN: JSON
+    - name: ステータス名
 	- OUT: なし
-- 所持状態を確認
-	- エンドポイント: /status/has_item/check
-	- IN: なし
+- ステータスを指定値にセット
+	- エンドポイント: /status/set
+	- IN: JSON
+    - name: ステータス名
+    - value: セットするステータス値
+	- OUT: なし
+- ステータスを確認
+	- エンドポイント: /status/get_status
+	- IN: JSON
+    - name: ステータス名
 	- OUT: JSON
-		- result: -1=エラー発生, 0=解除状態, 1=セットされた状態
-
-### お薬アラート (服用管理)
-
-- 状態リセット
-	- エンドポイント: /status/medicine/reset
-	- IN: なし
-	- OUT: なし
-- 服用状態にセット
-	- エンドポイント: /status/medicine/get
-	- IN: なし
-	- OUT: なし
-- 服用状態を解除
-	- エンドポイント: /status/medicine/put
-	- IN: なし
-	- OUT: なし
-- 服用状態を確認
-	- エンドポイント: /status/medicine/check
-	- IN: なし
+		- result: -1=エラー発生, それ以外=ステータス値
+- 最終更新日時を確認
+	- エンドポイント: /status/get_latest
+	- IN: JSON
+    - name: ステータス名
 	- OUT: JSON
-		- result: -1=エラー発生, 0=解除状態, 1=セットされた状態
-
-### APIデプロイ方法
-
-- status ディレクトリーをWebサーバーの公開ディレクトリーにアップロードする
-- WebサーバーのWSGIを有効化する
-- venv等で status 内にPython3.7環境を構築する
-- `$ pip install -r requirements.txt`
-- WSGIサーバーの設定ファイルに `app.py` を起動する設定を追加する
-- Webサーバーを再起動した上で、所定のエンドポイントを呼び出す
-
-<br>
+		- result: -1=エラー発生, それ以外=最終更新日時(yyyy-mm-dd)
+- 現在日時と最終更新日時の差分を確認
+	- エンドポイント: /status/get_latest_span
+	- IN: JSON
+    - name: ステータス名
+	- OUT: JSON
+		- result: -1=エラー発生, それ以外=現在日時と最終更新日時の差分秒数(float)
 
 
-## 雨傘判定API (weather)
+### 雨傘判定API (weather)
 
 通勤時間帯にあたる9:00-10:00, 18:00-22:00の札幌市の天気予報を返します。
-朝に判定して、何らかの手段にてアラートを出すのがオススメです。
+朝に判定して、何らかの手段にてアラートを出すようなユースケースを想定しています。
 
 - 雨傘判定
 	- エンドポイント: /weather/check
@@ -94,19 +75,14 @@ ON/OFFのステートを管理します。
 			- 2: 曇りを含むか、判定期間の降水確率平均が0%を超える
 			- 1: 晴れを含むか、判定期間の降水確率平均が0%
 			- -1: エラー発生
-<br>
 
-### APIデプロイ方法
+## デプロイ方法
 
-- weather ディレクトリーをWebサーバーの公開ディレクトリーにアップロードする
-- WebサーバーのWSGIを有効化する
-- venv等で weather 内にPython3.7環境を構築する
-- `$ pip install -r requirements.txt`
-- WSGIサーバーの設定ファイルに `app.py` を起動する設定を追加する
-- Webサーバーを再起動した上で、所定のエンドポイントを呼び出す
+- 各種APIのDockerコンテナーを一式ビルドして起動します。
 
----
+```bash
+$ docker-compose up --build -d
+```
 
-## 備忘録
-python -m venv [newenvname]
-他の作り方だとWSGIサーバーがうまく動作しないっぽいので注意
+- 各種APIにGETもしくはPOSTでアクセスします。
+  - 例: `http://HOSTNAME:3001/holiday/is_holiday?date=2020/01/01`

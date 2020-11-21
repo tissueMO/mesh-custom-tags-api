@@ -1,0 +1,38 @@
+version: "3"
+networks:
+  meshcustomtags:
+services:
+  proxy:
+    build: .
+    image: mesh-proxy
+    container_name: mesh-proxy
+    restart: always
+    depends_on:
+      - holiday
+      - status
+      - weather
+    ports:
+      - 3001:8080
+    networks:
+      - meshcustomtags
+  holiday:
+    build: holiday
+    image: mesh-holiday
+    container_name: mesh-holiday
+    restart: always
+    networks:
+      - meshcustomtags
+  status:
+    build: status
+    image: mesh-status
+    container_name: mesh-status
+    restart: always
+    networks:
+      - meshcustomtags
+  weather:
+    build: weather
+    image: mesh-weather
+    container_name: mesh-weather
+    restart: always
+    networks:
+      - meshcustomtags

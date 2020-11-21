@@ -1,14 +1,21 @@
 ##########################################################################################
-#    内蔵アプリケーションサーバーを起動します。
+#    各種APIに接続するプロキシーサーバーを起動します。
 ##########################################################################################
 from flask import Flask, request
-import api.main as main
+import requests
+
+# 定数定義
+SERVICE_PORT = 8080
 
 app = Flask(__name__)
 
-@app.route("/is_holiday", methods=["GET", "POST"])
-def index():
-    return main.is_holiday(_get_request_json())
+
+@app.route("/<category>/<method>", methods=["GET", "POST"])
+def proxy(category: str, method: str):
+    return requests.post(f"http://{category}:{SERVICE_PORT}/{method}",
+        headers={"Content-Type": "application/json"},
+        json=_get_request_json()
+    ).text
 
 
 def _get_request_json():

@@ -12,30 +12,30 @@ def reset():
 
 @app.route("/on", methods=["GET", "POST"])
 def on():
-    return main.on(get_request_json())
+    return main.on(_get_request_json())
 
 @app.route("/off", methods=["GET", "POST"])
 def off():
-    return main.off(get_request_json())
+    return main.off(_get_request_json())
 
 @app.route("/set", methods=["GET", "POST"])
 def set():
-    return main.set(get_request_json())
+    return main.set(_get_request_json())
 
 @app.route("/get_status", methods=["GET", "POST"])
 def get_status():
-    return main.get_status(get_request_json())
+    return main.get_status(_get_request_json())
 
 @app.route("/get_latest", methods=["GET", "POST"])
 def get_latest():
-    return main.get_latest(get_request_json())
+    return main.get_latest(_get_request_json())
 
 @app.route("/get_latest_span", methods=["GET", "POST"])
 def get_latest_span():
-    return main.get_latest_span(get_request_json())
+    return main.get_latest_span(_get_request_json())
 
 
-def get_request_json():
+def _get_request_json():
     """GET/POST両方に対応した形式でリクエストデータを変換します。
 
     Returns:

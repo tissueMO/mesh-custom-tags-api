@@ -6,7 +6,7 @@ import api.main as main
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/check", methods=["GET", "POST"])
 def index():
     return main.check()
 
