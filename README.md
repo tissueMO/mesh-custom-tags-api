@@ -11,7 +11,7 @@
 	- IN: JSON
 		- date: 判定対象の日付。yyyy/mm/dd の形式
 	- OUT: JSON
-		- result: 平日の場合は0, 土日祝の場合は1
+		- is_holiday: 土日祝の場合は true、平日の場合は false
 
 
 ### ステータス管理API (status)
@@ -26,7 +26,7 @@ ON/OFFのステートを管理します。
 - フラグをONにセット
 	- エンドポイント: /status/on
 	- IN: JSON
-    - name: ステータス名
+		- name: ステータス名
 	- OUT: なし
 - フラグをOFFにセット
 	- エンドポイント: /status/off
@@ -36,25 +36,25 @@ ON/OFFのステートを管理します。
 - ステータスを指定値にセット
 	- エンドポイント: /status/set
 	- IN: JSON
-    - name: ステータス名
-    - value: セットするステータス値
+		- name: ステータス名
+		- value: セットするステータス値
 	- OUT: なし
 - ステータスを確認
 	- エンドポイント: /status/get_status
 	- IN: JSON
-    - name: ステータス名
+		- name: ステータス名
 	- OUT: JSON
 		- result: -1=エラー発生, それ以外=ステータス値
 - 最終更新日時を確認
 	- エンドポイント: /status/get_latest
 	- IN: JSON
-    - name: ステータス名
+		- name: ステータス名
 	- OUT: JSON
 		- result: -1=エラー発生, それ以外=最終更新日時(yyyy-mm-dd)
 - 現在日時と最終更新日時の差分を確認
 	- エンドポイント: /status/get_latest_span
 	- IN: JSON
-    - name: ステータス名
+		- name: ステータス名
 	- OUT: JSON
 		- result: -1=エラー発生, それ以外=現在日時と最終更新日時の差分秒数(float)
 
