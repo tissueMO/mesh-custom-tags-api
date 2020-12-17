@@ -2,12 +2,14 @@
 #    各種APIに接続するプロキシーサーバーを起動します。
 ##########################################################################################
 from flask import Flask, request
+from flask_cors import CORS
 import requests
 
 # 定数定義
 SERVICE_PORT = 8080
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route("/<category>/<method>", methods=["GET", "POST"])
