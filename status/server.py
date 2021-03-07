@@ -48,6 +48,8 @@ def _get_request_json():
 
 
 if __name__ == "__main__":
+    main.reset()
+
     app.run(
         debug=False,
         host="0.0.0.0",
